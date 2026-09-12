@@ -9,15 +9,38 @@
   let enabled = true;
 
   // Load the on/off preference and keep it in sync with the popup toggle.
-  if (chrome?.storage?.sync) {
-    chrome.storage.sync.get({ enabled: true }, (res) => {
-      enabled = res.enabled;
-    });
-    chrome.storage.onChanged.addListener((changes, area) => {
-      if (area === 'sync' && changes.enabled) {
-        enabled = changes.enabled.newValue;
+  // Using chrome.storage.local rather than .sync — sync storage throws
+  // "Access to storage is not allowed from this context" when the
+  // browser profile doesn't have Chrome Sync enabled, which local
+  // storage doesn't depend on. Still wrapped defensively in case
+  // storage is unavailable for some other reason (fail open, stay
+  // enabled).
+  try {
+    if (chrome?.storage?.local) {
+      // chrome.storage.*.get() returns a promise internally even when a
+      // callback is supplied, and that promise can reject independently
+      // of the callback in a restricted context. Attach .catch()
+      // defensively so a rejection can't surface as an uncaught error.
+      const maybePromise = chrome.storage.local.get({ enabled: true }, (res) => {
+        if (chrome.runtime.lastError) {
+          console.warn('Mailto to Gmail: storage unavailable, defaulting to enabled.', chrome.runtime.lastError);
+          return;
+        }
+        enabled = res.enabled;
+      });
+      if (maybePromise && typeof maybePromise.catch === 'function') {
+        maybePromise.catch((err) => {
+          console.warn('Mailto to Gmail: storage unavailable, defaulting to enabled.', err);
+        });
       }
-    });
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' && changes.enabled) {
+          enabled = changes.enabled.newValue;
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('Mailto to Gmail: storage unavailable, defaulting to enabled.', err);
   }
 
   function parseMailto(href) {
@@ -167,10 +190,12 @@
     'click',
     function (e) {
       if (!enabled) return;
-      let target = e.target;
-      while (target && target.tagName !== 'A') target = target.parentElement;
-      if (target && target.href && target.href.toLowerCase().startsWith('mailto:')) {
+      const path = typeof e.composedPath === 'function' ? e.composedPath() : [];
+      const target = path.find((el) => el && el.tagName === 'A' && el.href);
+      if (target && target.href.toLowerCase().startsWith('mailto:')) {
+        console.log('[Mailto to Gmail] intercepted click on', target.href);
         e.preventDefault();
+        e.stopPropagation();
         showForm(target.href, e.clientX, e.clientY);
       }
     },
