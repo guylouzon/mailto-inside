@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send Email</title>
+  <style>
+    #mailto-form {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 24px;
+      z-index: 99999;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+      min-width: 350px;
+    }
+    #mailto-form input, #mailto-form textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    #mailto-form button {
+      padding: 8px 16px;
+    }
+  </style>
+</head>
+<body>
+  <form id="mailto-form" style="display:none;">
+    <label>To: <input type="email" id="to" name="to" required></label><br>
+    <label>Cc: <input type="email" id="cc" name="cc"></label><br>
+    <label>Bcc: <input type="email" id="bcc" name="bcc"></label><br>
+    <label>Subject: <input type="text" id="subject" name="subject"></label><br>
+    <label>Content:<br><textarea id="body" name="body" rows="6"></textarea></label><br>
+    <button type="submit">Send</button>
+    <button type="button" id="close-btn">Close</button>
+    <div id="mailto-status"></div>
+  </form>
+  <script src="form.js"></script>
+</body>
+</html>

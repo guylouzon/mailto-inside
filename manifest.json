@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Mailto Interceptor",
+  "version": "1.0",
+  "description": "Intercepts mailto links and opens a custom email form.",
+  "permissions": [
+    "scripting",
+    "identity",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "form.js"]
+    }
+  ],
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.send"
+    ]
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["form.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+
+}
