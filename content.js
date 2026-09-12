@@ -114,6 +114,9 @@
           <button type="submit">Open in Gmail</button>
           <span class="m2g-status"></span>
         </div>
+        <a class="m2g-coffee" href="https://www.buymeacoffee.com/guylouzon" target="_blank" rel="noopener noreferrer" title="Buy me a coffee">
+          ☕
+        </a>
       </form>
     `;
     document.documentElement.appendChild(container);
