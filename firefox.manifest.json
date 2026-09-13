@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Mailto Inside",
+  "version": "1.0.0",
+  "description": "Intercepts mailto: links and hands them off to a pre-filled Gmail compose window. No account access, no data leaves your browser.",
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "96": "icons/icon96.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mailto-to-gmail@guylouzon.example",
+      "strict_min_version": "109.0"
+    }
+  }
+}
