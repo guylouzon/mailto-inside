@@ -83,11 +83,8 @@ mailto-inside/
 
 ## Building
 
-```bash
-./build.sh
-```
 
-This copies `src/` into `dist/chrome/` and `dist/firefox/`, drops in the
+Required to build: copy `src/` into `dist/chrome/` and `dist/firefox/`, drop in the
 matching manifest as `manifest.json`, and produces a submission-ready zip for
 each (with `manifest.json` at the zip root, as required by the Chrome Web
 Store and AMO).
