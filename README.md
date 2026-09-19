@@ -38,17 +38,18 @@ entirely in Gmail's own web interface once the draft link is opened.
 
 ## Install
 
-### Chrome / Edge
+### Chrome / Edge / Opera
 
-1. Download the latest `mailto-to-gmail-chrome.zip` from [Releases](../../releases)
-   and unzip it, or clone the repo and use the `dist/chrome/` folder
-2. Go to `chrome://extensions` (or `edge://extensions`)
+1. Download the matching `mailto-inside-chrome.zip`, `mailto-inside-edge.zip`, or
+   `mailto-inside-opera.zip` from [Releases](../../releases) and unzip it, or
+   clone the repo and use the matching folder under `dist/`
+2. Go to `chrome://extensions`, `edge://extensions`, or `opera://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked** and select the unzipped folder
 
 ### Firefox
 
-1. Download `mailto-to-gmail-firefox.zip` from [Releases](../../releases) and
+1. Download `mailto-inside-firefox.zip` from [Releases](../../releases) and
    unzip it, or use the `dist/firefox/` folder
 2. Go to `about:debugging#/runtime/this-firefox`
 3. Click **Load Temporary Add-on…** and select `manifest.json` inside the
@@ -73,21 +74,25 @@ mailto-inside/
 │       ├── icon32.png
 │       ├── icon48.png
 │       └── icon128.png
-├── manifest.chrome.json  # also used for Edge
-├── manifest.firefox.json
+├── chrome.manifest.json
+├── firefox.manifest.json
+├── edge.manifest.json
+├── opera.manifest.json
 ├── build.sh
 └── dist/                 # build output, git-ignored
     ├── chrome/
-    └── firefox/
+    ├── firefox/
+    ├── edge/
+    └── opera/
 ```
 
 ## Building
 
 
-Required to build: copy `src/` into `dist/chrome/` and `dist/firefox/`, drop in the
-matching manifest as `manifest.json`, and produces a submission-ready zip for
-each (with `manifest.json` at the zip root, as required by the Chrome Web
-Store and AMO).
+Run `./build.sh`. It copies `src/` into a browser-specific folder, adds the
+matching manifest as `manifest.json`, and creates Chrome, Firefox, Edge, and
+Opera zip files. Each zip has `manifest.json` at its root, as required by the
+browser stores.
 
 ## Permissions explained
 
